@@ -66,8 +66,9 @@ class Node:
 class A:
     """A* Class to be able to run multiple shortest path algoritms at once"""
 
-    def __init__(self, grid: List[List[str]]):
+    def __init__(self, grid: List[List[str]], uncertain: bool = False):
         self.grid: List[List[str]] = grid
+        self.uncertain = uncertain
     
     @property
     def goal(self) -> Node:
@@ -125,10 +126,10 @@ class A:
                     if s in self.CLOSED:
                         self.propagate_path_improvements(s)
 
-    def h(self, n:Node, uncertain = False) -> int:
+    def h(self, n:Node) -> int:
         """Best case estimate of shortest possible path to goal"""
         # We can make the search faster by making a prediction that is not minimum but might not get the optimal route
-        if n-self.start > 0 and uncertain:
+        if self.uncertain and n-self.start > 0:
             return (n - self.goal) * (n.g / (n-self.start))
         # Each node to goal has a value of 1
         return (n - self.goal)
@@ -193,7 +194,7 @@ class A:
         print()
 
 
-def main(file: str, verbose: bool, algorithm: str) -> None:
+def main(file: str, verbose: bool, algorithm: str, uncertain: bool) -> None:
     """Main run function"""
     # Read the map from file
     grid: List[List[str]] = []
@@ -202,7 +203,7 @@ def main(file: str, verbose: bool, algorithm: str) -> None:
             grid.append(list(l.rstrip()))
 
     # Make an environement for the algorithm
-    a = A(grid)
+    a = A(grid, uncertain)
 
     # Print the map
     if verbose:
@@ -235,11 +236,12 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--file", default='boards/board-1-1.txt', help="Path to input file")
     parser.add_argument("-v", "--verbose", action='store_const', const=True, default=False, help="Include open and closed nodes in output")
     parser.add_argument("-a", "--algorithm", default='A*', help="Choose an algorith: A*, Djikstra, BFS")
+    parser.add_argument("-u", "--uncertain", action='store_const', const=True, default=False, help="Pay accuracy for speed")
 
     # Parse arguments
     args = parser.parse_args()
 
     # Run the program
-    main(args.file, args.verbose, args.algorithm)
+    main(args.file, args.verbose, args.algorithm, args.uncertain)
 
 
