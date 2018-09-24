@@ -68,7 +68,7 @@ class A:
 
     def __init__(self, grid: List[List[str]], uncertain: bool = False):
         self.grid: List[List[str]] = grid
-        self.uncertain = uncertain
+        self.h = None
     
     @property
     def goal(self) -> Node:
@@ -129,8 +129,8 @@ class A:
     def h(self, n:Node) -> int:
         """Best case estimate of shortest possible path to goal"""
         # We can make the search faster by making a prediction that is not minimum but might not get the optimal route
-        if self.uncertain and n-self.start > 0:
-            return (n - self.goal) * (n.g / (n-self.start))
+        if self.h:
+            return h(n)
         # Each node to goal has a value of 1
         return (n - self.goal)*1
 
