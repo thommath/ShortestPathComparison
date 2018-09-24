@@ -68,7 +68,7 @@ class A:
 
     def __init__(self, grid: List[List[str]], uncertain: bool = False):
         self.grid: List[List[str]] = grid
-        self.h = None
+        self.h = lambda n: (n - self.goal)
     
     @property
     def goal(self) -> Node:
@@ -125,14 +125,6 @@ class A:
                     self.attach_and_eval(s, x)
                     if s in self.CLOSED:
                         self.propagate_path_improvements(s)
-
-    def h(self, n:Node) -> int:
-        """Best case estimate of shortest possible path to goal"""
-        # We can make the search faster by making a prediction that is not minimum but might not get the optimal route
-        if self.h:
-            return h(n)
-        # Each node to goal has a value of 1
-        return (n - self.goal)*1
 
     def arc_cost(c: Node, p: Node) -> int:
         """Defining the cost of going to the next node"""
