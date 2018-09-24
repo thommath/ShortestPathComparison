@@ -10,9 +10,9 @@ class Node:
         self.pos: Tuple[int, int] = pos
         self.parent = None
         self.kids = []
-        self.f: int = 0
-        self.g: int = 0
-        self.h: int = 0
+        self.f: int = 0 # f equals g + h
+        self.g: int = 0 # g is the cost to get to this node
+        self.h: int = 0 # h is the estimated cost to get to the goal
  
     @property
     def val(self) -> str:
