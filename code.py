@@ -88,7 +88,7 @@ class A:
                     return Node((x, y), self.grid)
 
 
-    def best_first_search(self, order=lambda x: x.f) -> Tuple[Node, bool]:
+    def best_first_search(self, order=lambda x: x.f) -> Tuple[Node, bool, List[Node], List[Node]]:
         """Shortest path function"""
         # Keep track of open and closed nodes
         self.OPEN: List[Node] = []
@@ -102,7 +102,7 @@ class A:
         while 1:
             # Return None if there is no path to goal
             if self.OPEN == []:
-                return (None, False)
+                return (None, False, None, None)
             
             # Get next node
             x = self.OPEN.pop(0)
@@ -110,7 +110,7 @@ class A:
 
             # If next is goal return true
             if x.val == 'B':
-                return (x, True)
+                return (x, True, self.CLOSED, self.OPEN)
             
             # Loop over all adjacent nodes to the next node
             for s in x.succ():
@@ -132,7 +132,7 @@ class A:
         if self.uncertain and n-self.start > 0:
             return (n - self.goal) * (n.g / (n-self.start))
         # Each node to goal has a value of 1
-        return (n - self.goal)
+        return (n - self.goal)*1
 
     def arc_cost(c: Node, p: Node) -> int:
         """Defining the cost of going to the next node"""
