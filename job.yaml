@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: compare
+spec:
+  template:
+    spec:
+      containers:
+      - name: compare
+        image: eu.gcr.io/kubernetes-thomas-testing/compare
+        command: ["python3.6", "comparator.py", "-i 1000"]
+      restartPolicy: Never
+  backoffLimit: 4

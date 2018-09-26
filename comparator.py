@@ -78,17 +78,17 @@ def write_file(grid: List[List[str]], file: str):
             f.write(s + '\n') 
 
 
-def main(uncertain: bool, output: str) -> None:
+def main(iterations: int) -> None:
     """Main run function"""
 
     score: List[int] = []
     victories: List[int] = []
 
-    for i in range(100):
+    for i in range(iterations):
         print('Iteration ', i)
 
         grid: List[List[str]] = generate_graph()
-        write_file(grid, 'boards/compare-' + str(i) + '.txt')
+        write_file(grid, 'compare-' + str(i) + '.txt')
 
         res = run_algorithms(grid)
 
@@ -108,6 +108,10 @@ def main(uncertain: bool, output: str) -> None:
         print('Dji.\t', score[-1], victories[-1])
 #        print('BFS\t', score[3], victories[3])
         print()
+
+    with open('out.txt', 'w') as f:
+        f.write(str(score) + '\n' + str(victories)) 
+
 
 
     # Write the map to file
@@ -133,12 +137,14 @@ def main(uncertain: bool, output: str) -> None:
 if __name__ == "__main__":
     # Define arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--output", default='', help="Path to output file")
-    parser.add_argument("-u", "--uncertain", action='store_const', const=True, default=False, help="Pay accuracy for speed")
+    # parser.add_argument("-o", "--output", default='', help="Path to output file")
+    # parser.add_argument("-u", "--uncertain", action='store_const', const=True, default=False, help="Pay accuracy for speed")
+    parser.add_argument("-i", "--iterations", default=1, help="Define number of iterations")
 
     # Parse arguments
     args = parser.parse_args()
 
     # Run the program
-    main(args.uncertain, args.output)
+   # main(args.uncertain, args.output)
+    main(int(args.iterations))
 
